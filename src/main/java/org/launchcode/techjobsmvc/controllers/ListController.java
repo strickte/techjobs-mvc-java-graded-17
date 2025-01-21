@@ -28,6 +28,7 @@ public class ListController {
         columnChoices.put("positionType", "Position Type");
         columnChoices.put("coreCompetency", "Skill");
 
+        tableChoices.put("all", "All");
         tableChoices.put("employer", JobData.getAllEmployers());
         tableChoices.put("location", JobData.getAllLocations());
         tableChoices.put("positionType", JobData.getAllPositionTypes());
@@ -47,14 +48,14 @@ public class ListController {
     }
 
     @GetMapping(value = "jobs")
-    public String listJobsByColumnAndValue(Model model, @RequestParam String column, @RequestParam(required = false) String value) {
+    public String listJobsByColumnAndValue(Model model, @RequestParam String searchType, @RequestParam(required = false) String searchTerm) {
         ArrayList<Job> jobs;
-        if (column.equals("all")){
+        if (searchType.equals("all")){
             jobs = JobData.findAll();
             model.addAttribute("title", "All Jobs");
         } else {
-            jobs = JobData.findByColumnAndValue(column, value);
-            model.addAttribute("title", "Jobs with " + columnChoices.get(column) + ": " + value);
+            jobs = JobData.findByColumnAndValue(searchType, searchTerm);
+            model.addAttribute("title", "Jobs with " + columnChoices.get(searchType) + ": " + searchTerm);
         }
         model.addAttribute("jobs", jobs);
 
